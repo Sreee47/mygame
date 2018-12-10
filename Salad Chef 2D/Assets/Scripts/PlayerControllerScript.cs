@@ -40,14 +40,14 @@ public class PlayerControllerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Timer();
-        
-	}
+        MovePlayer();
+    }
 
     //FixedUpdate is called every fixed frames.
     //This is commonly used for rigidbody movements.
     private void FixedUpdate()
     {
-        MovePlayer();
+       
     }
 
     //Timer function to controle the gametime left and to pause the player once the time is up
@@ -68,13 +68,14 @@ public class PlayerControllerScript : MonoBehaviour {
     //Move the player based on the key inputs.
     void MovePlayer()
     {
-        print(canMove);
+     
         if (canMove)
         {
+
             //Move forward
             if (Input.GetKey(moveForward))
             {
-                print(this.gameObject+"forward cicked");
+      
                 this.gameObject.GetComponent<Rigidbody2D>().velocity=new Vector2(0,playerSpeed);
             }
 
@@ -101,5 +102,45 @@ public class PlayerControllerScript : MonoBehaviour {
                 this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             }
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        PickDrop(collision.collider);
+    }
+
+    void PickDrop(Collider2D item)
+    {
+        if (Input.GetKey(pickItem))
+        {
+            print(item);
+            PickItem(item);
+        }
+        else if (Input.GetKey(dropItem))
+        {
+
+        }
+    }
+
+    //To pick particular vegetable from the rack.
+    //The pick action is implemented based on the collider interaction of the player and the vegetables.
+    void PickItem(Collider2D item)
+    {
+        if(playerBasket.Count <= 2)
+        {
+            if(item.gameObject.tag == "VEGETABLES")
+            {
+                GameObject vegItemPrefab = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                playerBasket.Add(vegItemPrefab);
+                vegItemPrefab.transform.parent = transform;
+                Vector3 vegPos = vegItemPrefab.transform.position;
+                vegPos.x += playerBasket.Count;
+                vegItemPrefab.transform.position = vegPos;
+
+                
+            }
+
+        }
+
     }
 }
