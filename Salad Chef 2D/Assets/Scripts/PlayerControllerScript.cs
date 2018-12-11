@@ -191,7 +191,7 @@ public class PlayerControllerScript : MonoBehaviour {
             //Dispose to the trashcan.
             if(item.gameObject.tag == "TrashCan")
             {
-                print("in trash can");
+                
                 Destroy(playerBasket[playerBasket.Count - 1]);
                 playerBasket.Remove(playerBasket[playerBasket.Count-1]);
                 
